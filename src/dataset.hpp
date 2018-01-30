@@ -4,6 +4,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <ostream>
 
 class CsvReader;
 
@@ -31,16 +32,44 @@ public:
      * @param xColLast Last feature column index
      * @param yColumn Index of column with answer if presented
      */
-    void read_csv(CsvReader& reader, int idCol, int xColFirst, int xColLast, int yCol = -1);
+    void readCSV(CsvReader& reader, int idCol, int xColFirst, int xColLast, int yCol = -1);
+
+    void writeAnswers(std::ostream& stream);
 
     /**
-     * @brief Get row by index
-     * @param row
+     * @brief Get features row by index
+     * @param rowRow index
      * @return raw pointer to data row
      */
     double* operator[](size_t row);
+    const double* operator[](size_t row) const;
 
-    size_t rowsCount();
+    /**
+     * @brief Get answer by row index
+     * @param row Row index
+     * @return +1/-1 or zero if no class set
+     */
+    double& answer(size_t row);
+    const double& answer(size_t row) const;
+
+    /**
+     * @brief Get id of data row
+     * @param row Row index
+     * @return id
+     */
+    size_t id(size_t row) const;
+
+    /**
+     * @brief Get total rows count
+     * @return count
+     */
+    size_t rowsCount() const;
+
+    /**
+     * @brief Get total number of columns
+     * @return
+     */
+    size_t colsCount() const;
 
 private:
     void addRow();

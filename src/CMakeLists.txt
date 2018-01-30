@@ -12,10 +12,18 @@ set(EXE_SOURCES
     main.cpp
     dataset.cpp
     csvreader.cpp
+    preprocessor.cpp
+    knn-model.cpp
+    logistic-regression.cpp
+
     
     dataset.hpp
     utils.hpp
     csvreader.hpp
+    preprocessor.hpp
+    imodel.hpp
+    knn-model.hpp
+    logistic-regression.hpp
 )
 
 include_directories(

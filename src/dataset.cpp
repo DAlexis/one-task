@@ -2,7 +2,6 @@
 #include "utils.hpp"
 #include "csvreader.hpp"
 
-#include <fstream>
 #include <stdexcept>
 #include <algorithm>
 
@@ -12,7 +11,7 @@ void DataSet::setRowLength(size_t rowLength)
     m_rowLehgth = rowLength;
 }
 
-void DataSet::read_csv(CsvReader& reader, int idCol, int xColFirst, int xColLast, int yCol)
+void DataSet::readCSV(CsvReader& reader, int idCol, int xColFirst, int xColLast, int yCol)
 {
     std::vector<std::string> line;
     setRowLength(xColLast - xColFirst + 1);
@@ -30,17 +29,15 @@ void DataSet::read_csv(CsvReader& reader, int idCol, int xColFirst, int xColLast
         {
             (*this)[rowsCount()-1][i-xColFirst] = std::stod(line[i]);
         }
-
-
     }
-    /*
-    std::ifstream infile(filename);
-    if (!infile.is_open())
-        throw std::runtime_error("Cannot open file " + filename);
+}
 
-    std::vector<int> sortedColumns = xColumns;
-    std::sort(sortedColumns.begin(), sortedColumns.end());*/
-
+void DataSet::writeAnswers(std::ostream& stream)
+{
+    for (size_t i=0; i<rowsCount(); i++)
+    {
+        stream << id(i) << "," << int(answer(i)) << std::endl;
+    }
 }
 
 double* DataSet::operator[](size_t row)
@@ -49,9 +46,39 @@ double* DataSet::operator[](size_t row)
     return &m_data[row*m_rowLehgth];
 }
 
-size_t DataSet::rowsCount()
+const double* DataSet::operator[](size_t row) const
+{
+    ASSERT(row < m_rowsCount, std::range_error("Selected row is out of range!"));
+    return &m_data[row*m_rowLehgth];
+}
+
+double& DataSet::answer(size_t row)
+{
+    ASSERT(row < m_rowsCount, std::range_error("Selected row is out of range!"));
+    return m_answers[row];
+}
+
+const double& DataSet::answer(size_t row) const
+{
+    ASSERT(row < m_rowsCount, std::range_error("Selected row is out of range!"));
+    return m_answers[row];
+}
+
+
+size_t DataSet::id(size_t row) const
+{
+    ASSERT(row < m_rowsCount, std::range_error("Selected row is out of range!"));
+    return m_ids[row];
+}
+
+size_t DataSet::rowsCount() const
 {
     return m_rowsCount;
+}
+
+size_t DataSet::colsCount() const
+{
+    return m_rowLehgth;
 }
 
 void DataSet::addRow()
