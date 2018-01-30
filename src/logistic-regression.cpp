@@ -4,8 +4,9 @@
 #include <cmath>
 #include <cstdlib>
 
-LogisticRegression::LogisticRegression(double gradStep) :
-    m_gradStep(gradStep)
+LogisticRegression::LogisticRegression(double gradStep, size_t itersCount) :
+    m_gradStep(gradStep),
+    m_itersCount(itersCount)
 {
 
 }
@@ -20,7 +21,12 @@ void LogisticRegression::fit(const DataSet& data)
         m_w[i] = double(rand() - RAND_MAX/2) / RAND_MAX;
     }
 
-    for (size_t i=0; i<data.rowsCount()/m_gradStep; i++)
+    if (m_itersCount == 0)
+    {
+        m_itersCount = double(data.rowsCount())/m_gradStep;
+    }
+
+    for (size_t i=0; i<m_itersCount; i++)
     {
         makeStochasticIteration(data);
     }
@@ -55,12 +61,13 @@ void LogisticRegression::makeStochasticIteration(const DataSet& data)
     double M = getDist(x) * answer;
 
     double brace = (1 - sigma(M));
+    double k = m_gradStep * answer * brace;
 
     for (size_t i=0; i<data.colsCount(); i++)
     {
-        m_w[i] += m_gradStep * answer * x[i] * brace;
+        m_w[i] += k * x[i];
     }
-    m_w.back() += m_gradStep * answer * (-1.0) * brace;
+    m_w.back() += k * (-1.0);
 }
 
 double LogisticRegression::getDist(const double x[])

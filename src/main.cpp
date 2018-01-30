@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
         if (method == "log")
         {
-            model.reset(new LogisticRegression());
+            model.reset(new LogisticRegression(0.01));
         } else if (method == "knn")
         {
             model.reset(new KNNModel());

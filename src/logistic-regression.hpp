@@ -8,7 +8,7 @@
 class LogisticRegression : public IModel
 {
 public:
-    LogisticRegression(double gradStep = 0.01);
+    LogisticRegression(double gradStep = 0.01, size_t itersCount = 0);
     void fit(const DataSet& data) override;
     void predict(DataSet& data) override;
 
@@ -20,6 +20,7 @@ private:
     // Dimension of weights vector. Last weight is weight of fake always "-1" feature
     int m_dim = 0;
     size_t m_rows = 0;
+    size_t m_itersCount = 0;
     std::vector<double> m_w;
     double m_gradStep;
 };

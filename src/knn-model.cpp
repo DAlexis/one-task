@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 
 KNNModel::KNNModel(int nearestCount) :
     m_nearestCount(nearestCount)
