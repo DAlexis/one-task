@@ -21,13 +21,11 @@ void KNNModel::predict(DataSet& data)
 {
     ASSERT(m_dim != 0, std::runtime_error("Cannot predict for not fitted model"));
 
-    for (size_t i=0; i<m_train->rowsCount(); i++)
+    for (size_t i=0; i<data.rowsCount(); i++)
     {
         const double* point = data[i];
         buildDistsWA(point);
         data.answer(i) = getMostProbableAnswer();
-        if (i%100 == 0)
-            std::cout << i << std::endl;
     }
 }
 

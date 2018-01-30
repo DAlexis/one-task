@@ -13,8 +13,14 @@ void DataSet::setRowLength(size_t rowLength)
 
 void DataSet::readCSV(CsvReader& reader, int idCol, int xColFirst, int xColLast, int yCol)
 {
+    ASSERT(xColFirst < xColLast, std::range_error("xColFirst must be lesser than xColLast!"));
     std::vector<std::string> line;
     setRowLength(xColLast - xColFirst + 1);
+    int maxCol = reader.header().size()-1;
+    if (maxCol < xColLast || maxCol < idCol || maxCol < yCol)
+    {
+        throw std::range_error("To few columns in csv file!");
+    }
     while (reader.getLine(line))
     {
         addRow();
